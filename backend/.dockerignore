@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+.github/
+
+# Documentation
+*.md
+!README.md
+
+# Logs
+*.log
+logs/
+
+# Test files
+test*.py
+*_test.py
+tests/
+
+# Jupyter
+*.ipynb
+.ipynb_checkpoints/
+
+# Backup files
+*_backup.py
+*_old.py
+main_old_backup.py
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Deployment configs
+IIS_DEPLOYMENT.md
+RAILWAY_DEPLOYMENT.md

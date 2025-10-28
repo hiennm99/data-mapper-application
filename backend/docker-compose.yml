@@ -1,0 +1,33 @@
+services:
+  api:
+    build: .
+    container_name: mapping-api
+    restart: unless-stopped
+    ports:
+      - 8001:8001
+    env_file:
+      - .env
+    volumes:
+      - ./secrets/sa-prod-ds-airbyte-sync@cvs-bigdata.json:/app/sa-prod-ds-airbyte-sync@cvs-bigdata.json:ro
+      - ./logs:/app/logs
+    environment:
+      - PYTHONPATH=/app
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/sa-prod-ds-airbyte-sync@cvs-bigdata.json
+    networks:
+      - app-network
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok-tunnel
+    restart: unless-stopped
+    command: http api:8001 --authtoken 34dxNdwM784EDmTphdzzyOo84MK_2hZfW39XqJSZSVkmcLikQ
+    ports:
+      - 4040:4040
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

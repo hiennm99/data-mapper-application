@@ -1,0 +1,14 @@
+
+fastapi
+uvicorn
+pydantic
+python-multipart
+python-dotenv
+sqlalchemy
+psycopg2-binary
+alembic
+pandas
+openpyxl
+xlrd
+google-cloud-storage
+pathlib2

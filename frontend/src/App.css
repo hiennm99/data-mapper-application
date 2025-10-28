@@ -1,0 +1,14 @@
+.react-datepicker {
+    border: 2px solid #3b82f6;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.react-datepicker__header {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    border-bottom: none;
+}
+
+.react-datepicker__day--selected {
+    background: #3b82f6;
+}

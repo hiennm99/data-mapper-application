@@ -1,0 +1,47 @@
+name: Keep Supabase Active
+
+on:
+  schedule:
+    # Chạy mỗi ngày lúc 8:00 UTC (3:00 PM ICT)
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Cho phép chạy thủ công
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Keep Supabase Active for Mapping Source Database
+        env:
+          SUPABASE_URL: https://dbovzvvqxdllsawdaeur.supabase.co
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRib3Z6dnZxeGRsbHNhd2RhZXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3NDQ4NDMsImV4cCI6MjA3NTMyMDg0M30.kVlQVMN0TK2y6_adrh_7FiPPBLTsaY_9NdSoY4FJYLw
+        run: |
+          echo "Pinging Supabase at $(date)"
+          
+          # Ping REST API endpoint
+          response=$(curl -s -w "%{http_code}" -X GET \
+            "$SUPABASE_URL/rest/v1/" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+          
+          http_code="${response: -3}"
+          
+          if [[ "$http_code" -ge 200 && "$http_code" -lt 300 ]]; then
+            echo "✅ Supabase ping successful! HTTP: $http_code"
+          else
+            echo "❌ Supabase ping failed! HTTP: $http_code"
+            echo "Response: ${response%???}"
+            exit 1
+          fi
+
+      - name: Log completion
+        run: |
+          echo "Supabase keepalive completed at $(date)"
