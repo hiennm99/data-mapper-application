@@ -1,0 +1,14 @@
+# Build output
+dist
+build
+
+# Dependencies
+node_modules
+
+# Documentation
+*.md
+README.md
+
+# Config files
+*.config.js
+*.config.ts

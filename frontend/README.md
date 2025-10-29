@@ -1,180 +1,373 @@
-# 🗺️ Data Mapper Application
+# 💻 Data Mapper Frontend
 
-> A modern data mapping application built with React, Vite, TypeScript, and TailwindCSS.  
-> Integrated with React Router, Axios, Lucide Icons, React DatePicker, and other powerful utilities.
+Modern, responsive React application built with Vite, TypeScript, and TailwindCSS for managing Excel file mappings and data exports.
 
 ---
 
-![Vite](https://img.shields.io/badge/Vite-7.1-blueviolet?logo=vite)
-![React](https://img.shields.io/badge/React-19.1-blue?logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.11-38b2ac?logo=tailwindcss)
-![License](https://img.shields.io/badge/license-MIT-green)
+## 🧭 Overview
+
+The frontend provides an intuitive interface for:
+- **Excel File Upload & Scanning**: Drag-and-drop Excel files for instant analysis
+- **Mapping Configuration**: Visual interface for creating complex data mappings
+- **Export Management**: View, edit, and manage mapping export configurations
+- **Real-time Feedback**: Toast notifications and loading states for better UX
+- **Responsive Design**: Mobile-first approach with TailwindCSS
 
 ---
 
 ## 🚀 Tech Stack
 
-| Technology | Purpose |
-|-------------|----------|
-| **[Vite](https://vitejs.dev/)** | Ultra-fast build tool for React |
-| **[React 19](https://react.dev/)** | Core UI library |
-| **[TypeScript](https://www.typescriptlang.org/)** | Static typing for safer, cleaner code |
-| **[TailwindCSS](https://tailwindcss.com/)** | Utility-first CSS framework |
-| **[Axios](https://axios-http.com/)** | HTTP client for API requests |
-| **[React Router DOM](https://reactrouter.com/)** | SPA routing management |
-| **[Lucide React](https://lucide.dev/)** | Modern and lightweight icon pack |
-| **[Sonner](https://sonner.emilkowal.ski/)** | Elegant toast notifications |
-| **[React DatePicker](https://reactdatepicker.com/)** | Flexible date picker component |
-| **[Lodash](https://lodash.com/)** | Modern JavaScript utility library |
-| **[@vercel/analytics](https://vercel.com/docs/analytics)** | Web analytics and performance tracking |
-| **[vite-tsconfig-paths](https://github.com/aleclarson/vite-tsconfig-paths)** | Auto-resolve aliases from `tsconfig` |
+| Library | Version | Purpose |
+|---------|---------|---------|
+| **React** | ^19.1.1 | UI framework |
+| **TypeScript** | ~5.8.3 | Type safety and developer experience |
+| **Vite** | ^7.1.0 | Lightning-fast build tool and dev server |
+| **TailwindCSS** | ^4.1.11 | Utility-first CSS framework |
+| **React Router DOM** | ^7.9.4 | Client-side routing |
+| **Axios** | ^1.12.2 | HTTP client for API requests |
+| **Lucide React** | ^0.539.0 | Beautiful icon library |
+| **Sonner** | ^2.0.7 | Toast notifications |
+| **React DatePicker** | ^8.7.0 | Date selection component |
+| **Lodash** | ^4.17.21 | Utility functions |
+| **Vercel Analytics** | ^1.5.0 | Performance monitoring |
 
 ---
 
-## 🧰 Project Structure
+## 🧱 Project Structure
 
-```bash
-src/
-├── assets/          # Images, fonts, svgs, etc.
-├── components/      # Shared UI components
-│   └── ui/          # UI component library
-├── config/          # Configuration files
-├── features/        # Feature-based modules
-│   ├── mapping/     # Data mapping feature
-│   └── exports-manager/  # Exports management feature
-├── hooks/           # Custom React hooks
-├── lib/             # Config helpers (axios, etc.)
-├── types/           # TypeScript type definitions
-├── utils/           # Utility helper functions
-├── App.tsx
-└── main.tsx
+```
+frontend/
+├── src/
+│   ├── features/                    # Feature-based modules
+│   │   ├── mapping/                 # Mapping page feature
+│   │   │   ├── components/          # Feature-specific components
+│   │   │   ├── hooks/               # Custom hooks
+│   │   │   ├── types/               # TypeScript types
+│   │   │   └── index.ts             # Public exports
+│   │   └── exports-manager/         # Exports management feature
+│   │       ├── components/
+│   │       ├── hooks/
+│   │       └── index.ts
+│   │
+│   ├── components/                  # Shared UI components
+│   │   └── ui/                      # Reusable UI primitives
+│   │
+│   ├── config/                      # Configuration files
+│   │   └── api.ts                   # API configuration
+│   │
+│   ├── hooks/                       # Global custom hooks
+│   │
+│   ├── lib/                         # Utility libraries
+│   │
+│   ├── types/                       # Global TypeScript types
+│   │
+│   ├── utils/                       # Helper functions
+│   │
+│   ├── App.tsx                      # Root component
+│   ├── main.tsx                     # Application entry point
+│   └── index.css                    # Global styles
+│
+├── public/                          # Static assets
+│
+├── package.json                     # Dependencies and scripts
+├── vite.config.ts                   # Vite configuration
+├── tsconfig.app.json                # TypeScript config
+├── tsconfig.json                    # Base TypeScript config
+├── eslint.config.js                 # ESLint configuration
+├── postcss.config.js                # PostCSS configuration
+├── vercel.json                      # Vercel deployment config
+└── .env                             # Environment variables
 ```
 
 ---
 
-## ⚙️ Installation
+## ⚙️ Installation & Setup
 
-### 1️⃣ Clone the repository
-```bash
-git clone https://github.com/<your-username>/data-mapper-application.git
-cd data-mapper-application/frontend
-```
+### Prerequisites
+- **Node.js** 18+ or 20+
+- **pnpm** (recommended) or npm
 
-### 2️⃣ Install dependencies
+### Install Dependencies
 ```bash
-npm install
-# or
 pnpm install
 ```
 
-### 3️⃣ Configure environment variables
+### Environment Variables
 Create a `.env` file in the root directory:
-```bash
-VITE_BACKEND_URL=your-backend-url-here
-```
 
-### 4️⃣ Run the development server
-```bash
-npm run dev
+```env
+# Backend API URL
+VITE_BACKEND_URL=http://localhost:8001
 ```
-Visit: 👉 **http://localhost:5173**
 
 ---
 
 ## 🧩 Available Scripts
 
 | Command | Description |
-|----------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview the built app |
-| `npm run lint` | Run lint checks |
+|---------|-------------|
+| `pnpm dev` | Start development server at `http://localhost:5173` |
+| `pnpm build` | Build for production (outputs to `dist/`) |
+| `pnpm preview` | Preview production build locally |
+| `pnpm lint` | Run ESLint to check code quality |
+
+### Development
+```bash
+pnpm dev
+```
+Opens at `http://localhost:5173` with hot module replacement (HMR).
+
+### Production Build
+```bash
+pnpm build
+```
+Generates optimized static files in the `dist/` directory.
+
+### Preview Production Build
+```bash
+pnpm preview
+```
+Serves the production build locally for testing.
 
 ---
 
-## 🧱 Code Convention
+## 🧱 Code Conventions
 
-### ✨ Commit Convention
-This project uses **Husky + Commitlint + Lint-Staged**  
-Following the **Conventional Commit** standard.
+### ESLint Configuration
+The project uses a modern ESLint setup with:
+- **TypeScript ESLint**: Type-aware linting
+- **React Hooks**: Enforces Rules of Hooks
+- **Simple Import Sort**: Auto-sorts imports alphabetically
+- **Import Plugin**: Prevents duplicate imports
 
-Valid examples:
-```bash
-feat(mapping): add data source selection component
-fix(exports): handle empty export list
-chore: update eslint config
-refactor(ui): improve date picker styling
+### Auto-fix on Save
+Configure your IDE to run ESLint auto-fix on save:
+
+**VS Code** (`.vscode/settings.json`):
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
 ```
 
-### 📝 Linting
-- ESLint: configured with `eslint:recommended`, React, and TypeScript plugins.  
-- Import sorting: handled by `eslint-plugin-simple-import-sort`.  
-- Unused imports are automatically removed.
-- TypeScript: strict mode enabled with comprehensive linting rules.
+### Import Sorting
+Imports are automatically sorted by:
+1. External packages (React, libraries)
+2. Internal absolute imports (`@features`, `@components`)
+3. Relative imports (`./`, `../`)
+
+Example:
+```typescript
+import { useState } from 'react';
+import axios from 'axios';
+
+import { Button } from '@components/ui/Button';
+import { useMapping } from '@features/mapping';
+
+import { formatDate } from './utils';
+```
 
 ---
 
-## 🪶 TailwindCSS
-Configuration file: `tailwind.config.js`  
-You can extend colors, themes, and add plugins.
+## 🪶 TailwindCSS Setup
 
-TailwindCSS is integrated via the Vite plugin:
-```bash
-npm install @tailwindcss/vite tailwindcss
+### Configuration
+TailwindCSS v4 is integrated via the Vite plugin:
+
+```typescript
+// vite.config.ts
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [tailwindcss()]
+})
+```
+
+### Usage
+Use utility classes directly in JSX:
+
+```tsx
+<button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+  Click Me
+</button>
+```
+
+### Custom Styles
+Global styles are defined in `src/index.css`:
+
+```css
+@import "tailwindcss";
 ```
 
 ---
 
 ## 🗂️ Path Aliases
-Aliases are defined in `tsconfig.app.json` and automatically resolved via `vite-tsconfig-paths`.
 
-Available aliases:
-```ts
-import { Button } from '@components/ui/button';
+TypeScript path aliases are configured for cleaner imports:
+
+| Alias | Path | Usage |
+|-------|------|-------|
+| `@config` | `src/config` | Configuration files |
+| `@lib` | `src/lib` | Utility libraries |
+| `@types` | `src/types` | TypeScript types |
+| `@features` | `src/features` | Feature modules |
+| `@components` | `src/components` | Shared components |
+| `@shared` | `src/shared` | Shared resources |
+| `@utils` | `src/utils` | Helper functions |
+| `@assets` | `src/assets` | Static assets |
+
+### Example Usage
+```typescript
+// Instead of: import { api } from '../../../config/api'
+import { api } from '@config/api';
+
+// Instead of: import { Button } from '../../components/ui/Button'
+import { Button } from '@components/ui/Button';
+
+// Instead of: import { MappingPage } from '../features/mapping'
 import { MappingPage } from '@features/mapping';
-import { apiClient } from '@lib/axios';
-import { formatDate } from '@utils/date';
-import logo from '@assets/logo.svg';
 ```
 
 ---
 
-## 🧠 Tips
-- Use `sonner` for toast notifications:
-  ```ts
-  import { toast } from 'sonner';
-  toast.success("Data loaded successfully!");
-  toast.error("Failed to fetch data");
-  ```
+## 🧠 Development Tips
 
-- Use Lodash for data manipulation:
-  ```ts
-  import _ from 'lodash';
-  const grouped = _.groupBy(data, 'category');
-  const sorted = _.orderBy(items, ['date'], ['desc']);
-  ```
+### State Management
+- **Local State**: Use `useState` for component-level state
+- **Form State**: Use controlled components with React hooks
+- **API State**: Use custom hooks with Axios for data fetching
 
-- Use React DatePicker for date inputs:
-  ```ts
-  import DatePicker from 'react-datepicker';
-  import 'react-datepicker/dist/react-datepicker.css';
+### API Integration
+API calls are centralized in feature-specific hooks:
+
+```typescript
+// Example: features/mapping/hooks/useMapping.ts
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+
+export const useMapping = () => {
+  const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await axios.post(
+      `${API_URL}/api/excel/scan-upload`,
+      formData
+    );
+    
+    return response.data;
+  };
   
-  <DatePicker selected={startDate} onChange={setStartDate} />
-  ```
+  return { uploadFile };
+};
+```
+
+### Toast Notifications (Sonner)
+```typescript
+import { toast } from 'sonner';
+
+// Success
+toast.success('File uploaded successfully!');
+
+// Error
+toast.error('Failed to upload file');
+
+// Loading
+toast.loading('Uploading file...');
+
+// Promise-based
+toast.promise(uploadFile(file), {
+  loading: 'Uploading...',
+  success: 'Upload complete!',
+  error: 'Upload failed'
+});
+```
+
+### Icons (Lucide React)
+```typescript
+import { Upload, Download, Trash2 } from 'lucide-react';
+
+<Upload className="w-5 h-5" />
+<Download className="w-5 h-5 text-blue-500" />
+<Trash2 className="w-5 h-5 text-red-500" />
+```
+
+### Date Picker
+```typescript
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+const [startDate, setStartDate] = useState(new Date());
+
+<DatePicker
+  selected={startDate}
+  onChange={(date) => setStartDate(date)}
+  dateFormat="yyyy-MM-dd"
+/>
+```
 
 ---
 
 ## 📈 Deployment
-You can deploy on:
-- **Vercel** (recommended) - includes `vercel.json` configuration
-- **Netlify**
-- **Cloudflare Pages**
-- or your own server using `vite preview` / `nginx`
 
-The project includes SPA routing configuration for Vercel to handle client-side routing properly.
+### Vercel (Recommended)
+1. **Connect Repository**: Link your Git repository to Vercel
+2. **Configure Environment**:
+   - Add `VITE_BACKEND_URL` in Vercel dashboard
+3. **Deploy**: Automatic deployment on every push to main branch
+
+### Manual Deployment
+```bash
+# Build the project
+pnpm build
+
+# Deploy the dist/ folder to your hosting service
+# (Netlify, Vercel, AWS S3, etc.)
+```
+
+### Vercel Configuration
+The `vercel.json` file ensures proper SPA routing:
+
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+---
+
+## 🧪 Testing
+
+### Manual Testing
+```bash
+# Run dev server
+pnpm dev
+
+# Test in browser at http://localhost:5173
+```
+
+### Type Checking
+```bash
+# Check TypeScript types
+pnpm exec tsc --noEmit
+```
 
 ---
 
 ## 🧾 License
-MIT © 2025 – Built with ❤️ by your team
+
+This project is proprietary software. All rights reserved.
+
+---
+
+## 📞 Support
+
+For issues or questions, contact the development team.

@@ -8,7 +8,7 @@ import importPlugin from 'eslint-plugin-import'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', '**/*.md']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
