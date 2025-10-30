@@ -106,22 +106,17 @@ async def scan_uploaded_excel_file_with_gcs_endpoint(
         
         logger.info(f"Scanning uploaded file with GCS: {file.filename} ({file_size_mb:.2f}MB)")
         
-        # Scan file
-        scan_result = scan_uploaded_file(
+        # Scan file with GCS integration - this will save processed files to GCS_PROCESSED_FOLDER
+        scan_result = scan_uploaded_file_with_gcs(
             file_content=file_content,
             filename=file.filename,
-            max_scan_rows=max_scan_rows
+            max_scan_rows=max_scan_rows,
+            save_to_gcs=save_to_gcs,
+            gcs_bucket_name=gcs_bucket_name or settings.GCS_BUCKET_NAME
         )
         
-        # Upload to GCS if requested
-        gcs_info = None
-        if save_to_gcs:
-            gcs_info = ExcelScannerService.upload_to_gcs(
-                file_content=file_content,
-                filename=file.filename,
-                scan_result=scan_result,
-                bucket_name=gcs_bucket_name or settings.GCS_BUCKET_NAME
-            )
+        # Extract GCS info from scan result
+        gcs_info = scan_result.get("gcs_storage") if save_to_gcs else None
         
         # Save to database if requested
         saved_record = None
@@ -265,8 +260,14 @@ async def scan_uploaded_excel_files_multiple(
                 continue
             
             try:
-                # Scan file
-                scan_result = scan_uploaded_file(file_content, file.filename, max_scan_rows)
+                # Scan file with GCS integration - this will save processed files to GCS_PROCESSED_FOLDER
+                scan_result = scan_uploaded_file_with_gcs(
+                    file_content=file_content,
+                    filename=file.filename,
+                    max_scan_rows=max_scan_rows,
+                    save_to_gcs=save_to_gcs,
+                    gcs_bucket_name=settings.GCS_BUCKET_NAME
+                )
                 
                 # Save to database
                 saved_record = None
@@ -278,15 +279,8 @@ async def scan_uploaded_excel_files_multiple(
                         file_size_mb=file_size_mb
                     )
                 
-                # Upload to GCS if requested
-                gcs_info = None
-                if save_to_gcs:
-                    gcs_info = ExcelScannerService.upload_to_gcs(
-                        file_content=file_content,
-                        filename=file.filename,
-                        scan_result=scan_result,
-                        bucket_name=settings.GCS_BUCKET_NAME
-                    )
+                # Extract GCS info from scan result
+                gcs_info = scan_result.get("gcs_storage") if save_to_gcs else None
                 
                 # Create response
                 response = ExcelScannerService.create_response(

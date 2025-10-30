@@ -23,11 +23,13 @@ except ImportError as e:
 
 # ==== GCS Configuration ====
 GCS_BUCKET_NAME = "prod__cvs__ds__airbyte_sync__as__1"
-GCS_RAW_FOLDER = "massive_sources_mapping/raw_data"
-GCS_PROCESSED_FOLDER = "massive_sources_mapping/preprocessing_data"  
-GCS_SCHEMA_FOLDER = "massive_sources_mapping/parsed_schemas"
+GCS_PARENT_FOLDER = 'data-mapper-application'
+GCS_RAW_FOLDER = f"{GCS_PARENT_FOLDER}/raw_data"
+GCS_PROCESSED_FOLDER = f"{GCS_PARENT_FOLDER}/preprocessing_data"  
+GCS_SCHEMA_FOLDER = f"{GCS_PARENT_FOLDER}/parsed_schemas"
 
 CREDENTIALS_PATH = "sa-prod-ds-airbyte-sync@cvs-bigdata.json"
+# CREDENTIALS_PATH = r"D:\data-platform\technical-stacks\secrets\bigquery\sa-prod-ds-airbyte-sync@cvs-bigdata.json"
 
 # ==== Utility Functions ====
 def clean_for_json(data: Any) -> Any:
@@ -313,10 +315,7 @@ class GCSFileManager:
                     "column_names": list(df.columns)
                 })
                 
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                safe_filename = Path(original_filename).stem
-                sheet_suffix = f"_{sheet_name}" if sheet_name else ""
-                gcs_filename = f"{safe_filename}_____{sheet_suffix}.csv"
+                gcs_filename = f"{original_filename}_____{sheet_name}.csv"
                 
                 gcs_processed_folder = f"{GCS_PROCESSED_FOLDER}/{datetime.now().strftime('%Y/%m/%d')}"
                 upload_info = self._upload_to_gcs(gcs_processed_folder, gcs_filename, csv_content, metadata)
@@ -376,7 +375,7 @@ class GCSFileManager:
                 
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 safe_filename = Path(original_filename).stem.replace(" ", "_")
-                gcs_filename = f"{safe_filename}______{timestamp}.json"
+                gcs_filename = f"{safe_filename}_schema_{timestamp}.json"
                 
                 gcs_schema_folder = f"{GCS_SCHEMA_FOLDER}/{datetime.now().strftime('%Y/%m/%d')}"
                 upload_info = self._upload_to_gcs(gcs_schema_folder, gcs_filename, json_content, metadata)
@@ -411,6 +410,62 @@ class GCSFileManager:
                 return fallback_result
             except Exception as fallback_error:
                 raise Exception(f"Both GCS and local fallback failed - GCS: {e}, Local: {fallback_error}")
+    
+    def upload_file(self, file_content: bytes, destination_blob_name: str, content_type: str = None, metadata: dict = None) -> Dict[str, Any]:
+        """
+        Upload file content to GCS
+        
+        Args:
+            file_content: File content as bytes
+            destination_blob_name: Destination path in GCS (including filename)
+            content_type: MIME type of the file (optional)
+            metadata: Additional metadata to store with the file (optional)
+            
+        Returns:
+            Dict with upload info or raises exception
+        """
+        if not self.gcs_enabled:
+            raise RuntimeError(f"GCS not enabled - {self.error_message or 'check credentials and configuration'}")
+        
+        # Extract filename from destination_blob_name for metadata
+        filename = destination_blob_name.split('/')[-1] if '/' in destination_blob_name else destination_blob_name
+        
+        # Generate metadata if not provided
+        if metadata is None:
+            metadata = self._generate_file_metadata(filename, content_type)
+        
+        # Upload to GCS
+        upload_info = self._upload_to_gcs(
+            folder='/'.join(destination_blob_name.split('/')[:-1]) if '/' in destination_blob_name else '',
+            filename=filename,
+            content=file_content,
+            metadata=metadata
+        )
+        
+        return upload_info
+        
+    def upload_json(self, data: Any, destination_blob_name: str, **kwargs) -> Dict[str, Any]:
+        """
+        Upload JSON data to GCS
+        
+        Args:
+            data: Data to be serialized to JSON
+            destination_blob_name: Destination path in GCS (including filename)
+            **kwargs: Additional arguments passed to json.dumps()
+            
+        Returns:
+            Dict with upload info or raises exception
+        """
+        # Convert data to JSON string with proper encoding
+        json_content = json.dumps(data, ensure_ascii=False, **kwargs).encode('utf-8')
+        
+        # Upload with JSON content type
+        return self.upload_file(
+            file_content=json_content,
+            destination_blob_name=destination_blob_name,
+            content_type='application/json',
+            metadata={"content_type": "application/json"}
+        )
     
     def save_complete_scan_result(self, file_content: bytes, original_filename: str, 
                                 scan_result: Dict, processed_files_info: List[Dict] = None) -> Dict[str, Any]:
@@ -591,14 +646,15 @@ def upload_dataframe_to_gcs(df: pd.DataFrame, destination_blob_name: str, bucket
         return None
 
 
-def upload_json_to_gcs(data: Any, destination_blob_name: str, bucket_name: Optional[str] = None) -> Optional[Dict[str, Any]]:
+def upload_json_to_gcs(data: Any, destination_blob_name: str, bucket_name: Optional[str] = None, **kwargs) -> Optional[Dict[str, Any]]:
     """
     Upload JSON data to GCS
     
     Args:
         data: Data to upload (will be converted to JSON)
-        destination_blob_name: Destination path in GCS
+        destination_blob_name: Destination path in GCS (including .json extension)
         bucket_name: GCS bucket name (optional)
+        **kwargs: Additional arguments to pass to json.dumps()
         
     Returns:
         Dict with upload info or None if failed
@@ -609,7 +665,22 @@ def upload_json_to_gcs(data: Any, destination_blob_name: str, bucket_name: Optio
             print(f"⚠️ GCS not available: {manager.error_message}")
             return None
         
-        result = manager.upload_json(data, destination_blob_name)
+        # Ensure the filename ends with .json
+        if not destination_blob_name.lower().endswith('.json'):
+            destination_blob_name = f"{destination_blob_name}.json"
+        
+        # Convert data to JSON string with proper encoding
+        json_content = json.dumps(data, ensure_ascii=False, indent=2, **kwargs).encode('utf-8')
+        
+        # Upload the file
+        result = manager.upload_file(
+            file_content=json_content,
+            destination_blob_name=destination_blob_name,
+            content_type='application/json',
+            metadata={"content_type": "application/json"}
+        )
+        
+        print(f"✅ Successfully uploaded JSON to gs://{manager.bucket_name}/{destination_blob_name}")
         return result
     except Exception as e:
         print(f"❌ Error uploading JSON to GCS: {e}")
