@@ -315,7 +315,8 @@ class GCSFileManager:
                     "column_names": list(df.columns)
                 })
                 
-                gcs_filename = f"{original_filename}_____{sheet_name}.csv"
+                filename_without_ext = Path(original_filename).stem
+                gcs_filename = f"{filename_without_ext}_____{sheet_name}.csv"
                 
                 gcs_processed_folder = f"{GCS_PROCESSED_FOLDER}/{datetime.now().strftime('%Y/%m/%d')}"
                 upload_info = self._upload_to_gcs(gcs_processed_folder, gcs_filename, csv_content, metadata)
