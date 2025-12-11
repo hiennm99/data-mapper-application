@@ -1,21 +1,18 @@
-# 💻 Data Mapper Frontend
+# Data Mapper Frontend
 
 Modern, responsive React application built with Vite, TypeScript, and TailwindCSS for managing Excel file mappings and data exports.
 
----
-
-## 🧭 Overview
+## Overview
 
 The frontend provides an intuitive interface for:
+
 - **Excel File Upload & Scanning**: Drag-and-drop Excel files for instant analysis
 - **Mapping Configuration**: Visual interface for creating complex data mappings
 - **Export Management**: View, edit, and manage mapping export configurations
 - **Real-time Feedback**: Toast notifications and loading states for better UX
 - **Responsive Design**: Mobile-first approach with TailwindCSS
 
----
-
-## 🚀 Tech Stack
+## Tech Stack
 
 | Library | Version | Purpose |
 |---------|---------|---------|
@@ -31,9 +28,7 @@ The frontend provides an intuitive interface for:
 | **Lodash** | ^4.17.21 | Utility functions |
 | **Vercel Analytics** | ^1.5.0 | Performance monitoring |
 
----
-
-## 🧱 Project Structure
+## Project Structure
 
 ```
 frontend/
@@ -42,22 +37,25 @@ frontend/
 │   │   ├── mapping/                 # Mapping page feature
 │   │   │   ├── components/          # Feature-specific components
 │   │   │   ├── hooks/               # Custom hooks
-│   │   │   ├── types/               # TypeScript types
-│   │   │   └── index.ts             # Public exports
+│   │   │   ├── pages/               # Page components
+│   │   │   ├── services/            # API services
+│   │   │   └── utils/               # Feature utilities
 │   │   └── exports-manager/         # Exports management feature
 │   │       ├── components/
 │   │       ├── hooks/
-│   │       └── index.ts
+│   │       ├── pages/
+│   │       └── services/
 │   │
 │   ├── components/                  # Shared UI components
 │   │   └── ui/                      # Reusable UI primitives
 │   │
 │   ├── config/                      # Configuration files
-│   │   └── api.ts                   # API configuration
+│   │   └── columnGroups.ts          # Column group configuration
 │   │
 │   ├── hooks/                       # Global custom hooks
 │   │
 │   ├── lib/                         # Utility libraries
+│   │   └── axiosClient.ts           # Axios configuration
 │   │
 │   ├── types/                       # Global TypeScript types
 │   │
@@ -70,7 +68,7 @@ frontend/
 ├── public/                          # Static assets
 │
 ├── package.json                     # Dependencies and scripts
-├── vite.config.ts                   # Vite configuration
+├── vite.config.ts                  # Vite configuration
 ├── tsconfig.app.json                # TypeScript config
 ├── tsconfig.json                    # Base TypeScript config
 ├── eslint.config.js                 # ESLint configuration
@@ -79,9 +77,7 @@ frontend/
 └── .env                             # Environment variables
 ```
 
----
-
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 - **Node.js** 18+ or 20+
@@ -100,9 +96,7 @@ Create a `.env` file in the root directory:
 VITE_BACKEND_URL=http://localhost:8001
 ```
 
----
-
-## 🧩 Available Scripts
+## Available Scripts
 
 | Command | Description |
 |---------|-------------|
@@ -129,9 +123,7 @@ pnpm preview
 ```
 Serves the production build locally for testing.
 
----
-
-## 🧱 Code Conventions
+## Code Conventions
 
 ### ESLint Configuration
 The project uses a modern ESLint setup with:
@@ -169,9 +161,7 @@ import { useMapping } from '@features/mapping';
 import { formatDate } from './utils';
 ```
 
----
-
-## 🪶 TailwindCSS Setup
+## TailwindCSS Setup
 
 ### Configuration
 TailwindCSS v4 is integrated via the Vite plugin:
@@ -201,9 +191,7 @@ Global styles are defined in `src/index.css`:
 @import "tailwindcss";
 ```
 
----
-
-## 🗂️ Path Aliases
+## Path Aliases
 
 TypeScript path aliases are configured for cleaner imports:
 
@@ -214,7 +202,6 @@ TypeScript path aliases are configured for cleaner imports:
 | `@types` | `src/types` | TypeScript types |
 | `@features` | `src/features` | Feature modules |
 | `@components` | `src/components` | Shared components |
-| `@shared` | `src/shared` | Shared resources |
 | `@utils` | `src/utils` | Helper functions |
 | `@assets` | `src/assets` | Static assets |
 
@@ -230,9 +217,7 @@ import { Button } from '@components/ui/Button';
 import { MappingPage } from '@features/mapping';
 ```
 
----
-
-## 🧠 Development Tips
+## Development Tips
 
 ### State Management
 - **Local State**: Use `useState` for component-level state
@@ -240,28 +225,24 @@ import { MappingPage } from '@features/mapping';
 - **API State**: Use custom hooks with Axios for data fetching
 
 ### API Integration
-API calls are centralized in feature-specific hooks:
+API calls are centralized in feature-specific services:
 
 ```typescript
-// Example: features/mapping/hooks/useMapping.ts
+// Example: features/mapping/services/excelUploadService.ts
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-export const useMapping = () => {
-  const uploadFile = async (file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    const response = await axios.post(
-      `${API_URL}/api/excel/scan-upload`,
-      formData
-    );
-    
-    return response.data;
-  };
+export const uploadFile = async (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
   
-  return { uploadFile };
+  const response = await axios.post(
+    `${API_URL}/api/excel/scan-upload`,
+    formData
+  );
+  
+  return response.data;
 };
 ```
 
@@ -309,9 +290,7 @@ const [startDate, setStartDate] = useState(new Date());
 />
 ```
 
----
-
-## 📈 Deployment
+## Deployment
 
 ### Vercel (Recommended)
 1. **Connect Repository**: Link your Git repository to Vercel
@@ -342,9 +321,7 @@ The `vercel.json` file ensures proper SPA routing:
 }
 ```
 
----
-
-## 🧪 Testing
+## Testing
 
 ### Manual Testing
 ```bash
@@ -360,14 +337,10 @@ pnpm dev
 pnpm exec tsc --noEmit
 ```
 
----
-
-## 🧾 License
+## License
 
 This project is proprietary software. All rights reserved.
 
----
-
-## 📞 Support
+## Support
 
 For issues or questions, contact the development team.

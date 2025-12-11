@@ -1,21 +1,18 @@
-# 🗺️ Data Mapper Application
+# Data Mapper Application
 
-A fullstack web application for managing Excel file mapping exports with an intelligent scanner. Built with React + Vite + TypeScript on the frontend and FastAPI on the backend, designed for efficient data mapping workflows.
+A full-stack web application for managing Excel file mapping exports with intelligent scanning capabilities. Built with React + TypeScript on the frontend and FastAPI on the backend.
 
----
-
-## 🧭 Overview
+## Overview
 
 The Data Mapper Application provides a comprehensive solution for:
+
 - **Excel File Scanning**: Upload and analyze Excel files (.xlsx, .xls) to extract structure and preview data
 - **Mapping Rules Management**: Create, update, and manage complex data mapping configurations
 - **Cloud Storage Integration**: Automatic upload to Google Cloud Storage (GCS)
 - **Batch Processing**: Handle multiple files simultaneously
 - **Scan History**: Track and retrieve previous scan results
 
----
-
-## 🏗️ System Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -49,40 +46,31 @@ The Data Mapper Application provides a comprehensive solution for:
 └─────────────────────────────────────────────────────────────┘
 ```
 
----
-
-## 🚀 Tech Stack
+## Tech Stack
 
 ### Frontend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| React | ^19.1.1 | UI framework |
-| TypeScript | ~5.8.3 | Type safety |
-| Vite | ^7.1.0 | Build tool & dev server |
-| TailwindCSS | ^4.1.11 | Styling framework |
-| React Router | ^7.9.4 | Client-side routing |
-| Axios | ^1.12.2 | HTTP client |
-| Lucide React | ^0.539.0 | Icon library |
-| Sonner | ^2.0.7 | Toast notifications |
-| React DatePicker | ^8.7.0 | Date selection |
+- **React** 19.1.1 - UI framework
+- **TypeScript** 5.8.3 - Type safety
+- **Vite** 7.1.0 - Build tool & dev server
+- **TailwindCSS** 4.1.11 - Styling framework
+- **React Router** 7.9.4 - Client-side routing
+- **Axios** 1.12.2 - HTTP client
+- **Lucide React** 0.539.0 - Icon library
+- **Sonner** 2.0.7 - Toast notifications
 
 ### Backend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| FastAPI | >=0.104.0 | Web framework |
-| Uvicorn | >=0.24.0 | ASGI server |
-| Python | >=3.10 | Runtime |
-| Pydantic | >=2.5.0 | Data validation |
-| SQLAlchemy | >=2.0.0 | ORM |
-| PostgreSQL | - | Database |
-| Alembic | >=1.13.0 | Database migrations |
-| Pandas | >=2.1.0 | Data processing |
-| OpenPyXL | >=3.1.0 | Excel file handling |
-| Google Cloud Storage | >=2.14.0 | Cloud storage |
+- **FastAPI** >=0.104.0 - Web framework
+- **Uvicorn** >=0.24.0 - ASGI server
+- **Python** >=3.10 - Runtime
+- **Pydantic** >=2.5.0 - Data validation
+- **SQLAlchemy** >=2.0.0 - ORM
+- **PostgreSQL** - Database
+- **Alembic** >=1.13.0 - Database migrations
+- **Pandas** >=2.1.0 - Data processing
+- **OpenPyXL** >=3.1.0 - Excel file handling
+- **Google Cloud Storage** >=2.14.0 - Cloud storage
 
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 data-mapper-application/
@@ -97,10 +85,7 @@ data-mapper-application/
 │   │   ├── lib/                # Utility libraries
 │   │   ├── types/              # TypeScript type definitions
 │   │   └── utils/              # Helper functions
-│   ├── package.json
-│   ├── vite.config.ts
-│   ├── tsconfig.app.json
-│   └── eslint.config.js
+│   └── package.json
 │
 ├── backend/                     # FastAPI backend
 │   ├── core/                   # Core configuration
@@ -118,9 +103,7 @@ data-mapper-application/
 └── README.md                    # This file
 ```
 
----
-
-## ⚙️ Setup & Installation
+## Quick Start
 
 ### Prerequisites
 - **Node.js** (v18+) and **pnpm** (or npm)
@@ -128,13 +111,8 @@ data-mapper-application/
 - **PostgreSQL** database
 - **Google Cloud Storage** account (optional)
 
-### 1️⃣ Clone Repository
-```bash
-git clone <repository-url>
-cd data-mapper-application
-```
+### Frontend Setup
 
-### 2️⃣ Frontend Setup
 ```bash
 cd frontend
 pnpm install
@@ -152,7 +130,8 @@ pnpm dev
 
 Frontend will be available at `http://localhost:5173`
 
-### 3️⃣ Backend Setup
+### Backend Setup
+
 ```bash
 cd backend
 python -m venv .venv
@@ -182,9 +161,7 @@ Backend will be available at `http://localhost:8001`
 
 API documentation: `http://localhost:8001/docs`
 
----
-
-## 🐳 Docker Deployment
+## Docker Deployment
 
 ### Using Docker Compose
 ```bash
@@ -203,9 +180,7 @@ docker build -t data-mapper-api .
 docker run -p 8001:8001 --env-file .env data-mapper-api
 ```
 
----
-
-## 🌐 Environment Variables
+## Environment Variables
 
 ### Frontend
 | Variable | Description | Example |
@@ -222,9 +197,7 @@ docker run -p 8001:8001 --env-file .env data-mapper-api
 | `MAX_FILE_SIZE_MB` | Max file upload size | ❌ |
 | `MAX_FILES_PER_BATCH` | Max files per batch | ❌ |
 
----
-
-## 📡 API Endpoints
+## API Endpoints
 
 ### Excel Scanner
 - `POST /api/excel/scan-upload` - Upload and scan single file
@@ -243,9 +216,7 @@ docker run -p 8001:8001 --env-file .env data-mapper-api
 - `PUT /api/mapping-exports/{mapping_id}` - Update mapping
 - `DELETE /api/mapping-exports/{mapping_id}` - Delete mapping
 
----
-
-## 🧪 Development
+## Development
 
 ### Frontend Scripts
 ```bash
@@ -261,9 +232,7 @@ pytest                    # Run all tests
 pytest tests/test_*.py   # Run specific test
 ```
 
----
-
-## 🚢 Deployment
+## Deployment
 
 ### Frontend (Vercel)
 1. Connect repository to Vercel
@@ -278,20 +247,16 @@ pytest tests/test_*.py   # Run specific test
 5. Set up PostgreSQL database
 6. Configure GCS credentials
 
----
+## Documentation
 
-## 🧾 License
+- [Backend Documentation](./backend/README.md)
+- [Frontend Documentation](./frontend/README.md)
+- [UV Setup Guide](./backend/UV_SETUP.md)
+
+## License
 
 This project is proprietary software. All rights reserved.
 
----
-
-## 👥 Contributors
-
-Developed by the Data Platform Team
-
----
-
-## 📞 Support
+## Support
 
 For issues or questions, please contact the development team or create an issue in the repository.

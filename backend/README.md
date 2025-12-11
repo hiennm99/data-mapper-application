@@ -1,12 +1,11 @@
-# ⚙️ Data Mapper Backend
+# Data Mapper Backend
 
 High-performance FastAPI backend for Excel file scanning, data mapping management, and Google Cloud Storage integration.
 
----
-
-## 🧭 Overview
+## Overview
 
 The backend provides robust APIs for:
+
 - **Excel File Scanning**: Parse and analyze Excel files (.xlsx, .xls) with configurable row limits
 - **Mapping Rules Management**: CRUD operations for data mapping configurations
 - **Google Cloud Storage**: Automatic file upload and storage management
@@ -14,9 +13,7 @@ The backend provides robust APIs for:
 - **Database Persistence**: Store scan results and mapping rules in PostgreSQL
 - **RESTful API**: Well-documented endpoints with automatic OpenAPI docs
 
----
-
-## ⚙️ Tech Stack
+## Tech Stack
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
@@ -34,9 +31,7 @@ The backend provides robust APIs for:
 | **python-multipart** | >=0.0.6 | File upload support |
 | **python-dotenv** | >=1.0.0 | Environment variable management |
 
----
-
-## 🧱 Project Structure
+## Project Structure
 
 ```
 backend/
@@ -65,7 +60,7 @@ backend/
 ├── utils/                          # Utility functions
 │   ├── __init__.py
 │   ├── excel_scanner.py            # Excel parsing utilities
-│   └── validators.py               # Custom validators
+│   └── gcs_storage.py              # GCS storage utilities
 │
 ├── logs/                           # Application logs
 │
@@ -75,14 +70,10 @@ backend/
 ├── uv.lock                         # Dependency lock file
 ├── Dockerfile                      # Container configuration
 ├── docker-compose.yml              # Multi-container setup
-├── .dockerignore                   # Docker ignore patterns
-├── .env                            # Environment variables
 └── UV_SETUP.md                     # UV package manager guide
 ```
 
----
-
-## 🧰 Setup & Installation
+## Installation & Setup
 
 ### Prerequisites
 - **Python** 3.10 or higher
@@ -90,23 +81,23 @@ backend/
 - **Google Cloud Storage** account (optional)
 - **uv** package manager (recommended) or pip
 
-### 1️⃣ Clone Repository
+### 1. Clone Repository
 ```bash
 cd backend
 ```
 
-### 2️⃣ Create Virtual Environment
+### 2. Create Virtual Environment
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-### 3️⃣ Install Dependencies
+### 3. Install Dependencies
 
 **Using uv (recommended)**:
 ```bash
 pip install uv
-uv pip install -r pyproject.toml
+uv sync
 ```
 
 **Using pip**:
@@ -114,7 +105,7 @@ uv pip install -r pyproject.toml
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Configure Environment Variables
+### 4. Configure Environment Variables
 Create a `.env` file in the backend directory:
 
 ```env
@@ -141,7 +132,7 @@ MAX_SCAN_ROWS_DEFAULT=10
 MAX_SCAN_ROWS_LIMIT=20
 ```
 
-### 5️⃣ Set Up Google Cloud Storage (Optional)
+### 5. Set Up Google Cloud Storage (Optional)
 If using GCS integration:
 
 1. Create a service account in Google Cloud Console
@@ -151,7 +142,7 @@ If using GCS integration:
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
 ```
 
-### 6️⃣ Initialize Database
+### 6. Initialize Database
 ```bash
 # Create tables
 python -c "from core.database import create_tables; create_tables()"
@@ -160,7 +151,7 @@ python -c "from core.database import create_tables; create_tables()"
 alembic upgrade head
 ```
 
-### 7️⃣ Run Development Server
+### 7. Run Development Server
 ```bash
 python main.py
 ```
@@ -169,9 +160,7 @@ Server will start at `http://localhost:8001`
 
 API Documentation: `http://localhost:8001/docs`
 
----
-
-## 🧩 Environment Variables
+## Environment Variables
 
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
@@ -188,11 +177,9 @@ API Documentation: `http://localhost:8001/docs`
 | `MAX_SCAN_ROWS_DEFAULT` | Default rows to scan | ❌ | `10` |
 | `MAX_SCAN_ROWS_LIMIT` | Maximum rows to scan | ❌ | `20` |
 
----
+## API Endpoints
 
-## 📡 API Endpoints
-
-### 🔍 Excel Scanner
+### Excel Scanner
 
 #### Upload & Scan Single File
 ```http
@@ -257,9 +244,7 @@ GET /api/excel/gcs-config
 GET /api/excel/batch-upload-limits
 ```
 
----
-
-### 🗺️ Mapping Rules
+### Mapping Rules
 
 #### Create Mapping Rule
 ```http
@@ -307,9 +292,7 @@ Content-Type: application/json
 { "mappings": { ... } }
 ```
 
----
-
-## 🧠 Development Notes
+## Development
 
 ### Adding New Endpoints
 
@@ -376,14 +359,12 @@ black .
 isort .
 ```
 
----
-
-## 🧪 Testing
+## Testing
 
 ### Run Tests
 ```bash
 # Install dev dependencies
-pip install -e ".[dev]"
+uv sync --extra dev
 
 # Run all tests
 pytest
@@ -423,9 +404,7 @@ def test_scan_upload():
     assert "sheets" in response.json()
 ```
 
----
-
-## 📦 Deployment
+## Deployment
 
 ### Docker Deployment
 
@@ -486,9 +465,7 @@ gcloud run deploy data-mapper-api \
 - [ ] Enable rate limiting
 - [ ] Set up error tracking (Sentry)
 
----
-
-## 🧰 Uvicorn Configuration
+## Uvicorn Configuration
 
 ### Development
 ```bash
@@ -508,9 +485,7 @@ gunicorn main:app \
   --bind 0.0.0.0:8001
 ```
 
----
-
-## 📊 Monitoring & Logging
+## Monitoring & Logging
 
 ### Logs
 Application logs are stored in `logs/` directory:
@@ -524,14 +499,10 @@ GET /
 
 Returns API metadata and health status.
 
----
-
-## 🧾 License
+## License
 
 This project is proprietary software. All rights reserved.
 
----
-
-## 📞 Support
+## Support
 
 For issues or questions, contact the development team or create an issue in the repository.

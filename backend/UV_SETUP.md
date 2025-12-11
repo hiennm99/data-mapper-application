@@ -1,8 +1,8 @@
 # UV Setup Guide
 
-Dự án này sử dụng `uv` - Python package manager hiện đại, nhanh hơn pip.
+This project uses `uv` - a modern, fast Python package manager that is significantly faster than pip.
 
-## 📦 Installation
+## Installation
 
 ### 1. Install UV
 
@@ -12,7 +12,7 @@ pip install uv
 
 # Linux/Mac
 pip install uv
-# hoặc
+# or
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
@@ -22,14 +22,12 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 uv --version
 ```
 
----
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Local Development
 
 ```bash
-# 1. Sync dependencies (tạo .venv và cài packages)
+# 1. Sync dependencies (creates .venv and installs packages)
 uv sync
 
 # 2. Activate virtual environment
@@ -39,7 +37,7 @@ source .venv/bin/activate  # Linux/Mac
 # 3. Run application
 python main.py
 
-# Hoặc chạy trực tiếp (không cần activate)
+# Or run directly (no activation needed)
 uv run python main.py
 ```
 
@@ -56,9 +54,7 @@ docker compose up -d
 docker compose logs -f api
 ```
 
----
-
-## 📝 Project Structure
+## Project Structure
 
 ```
 project/
@@ -74,9 +70,7 @@ project/
 └── utils/                  # Utility modules
 ```
 
----
-
-## 🔧 Common Commands
+## Common Commands
 
 ### Dependency Management
 
@@ -128,9 +122,7 @@ source .venv/bin/activate  # Linux/Mac
 deactivate
 ```
 
----
-
-## 📋 pyproject.toml Sections
+## pyproject.toml Sections
 
 ### Project Metadata
 ```toml
@@ -174,11 +166,9 @@ profile = "black"
 python_version = "3.10"
 ```
 
----
+## Docker with UV
 
-## 🐳 Docker with UV
-
-Dockerfile đã được cập nhật để dùng `uv`:
+The Dockerfile has been updated to use `uv`:
 
 ```dockerfile
 # Install uv
@@ -188,30 +178,26 @@ RUN pip install --no-cache-dir uv
 RUN uv pip install --system -r pyproject.toml
 ```
 
-**Lợi ích:**
-- ⚡ Cài dependencies nhanh hơn
-- 📦 Quản lý version tốt hơn
+**Benefits:**
+- ⚡ Faster dependency installation
+- 📦 Better version management
 - 🔒 Consistent builds
 
----
+## Migration from requirements.txt
 
-## 🔄 Migration từ requirements.txt
-
-Nếu vẫn dùng `requirements.txt`:
+If you still use `requirements.txt`:
 
 ```bash
-# Tạo pyproject.toml từ requirements.txt
+# Create pyproject.toml from requirements.txt
 uv pip compile requirements.txt -o pyproject.toml
 
-# Hoặc cài từ requirements.txt
+# Or install from requirements.txt
 uv pip install -r requirements.txt
 ```
 
----
+## Performance
 
-## ⚡ Performance
-
-`uv` nhanh hơn pip:
+`uv` is significantly faster than pip:
 
 | Operation | pip | uv |
 |-----------|-----|-----|
@@ -219,9 +205,7 @@ uv pip install -r requirements.txt
 | Resolve dependencies | ~10s | ~1s |
 | Lock file generation | Manual | Auto |
 
----
-
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Issue: `uv: command not found`
 
@@ -233,10 +217,10 @@ pip install --upgrade uv
 uv --version
 ```
 
-### Issue: `.venv` không được tạo
+### Issue: `.venv` not created
 
 ```bash
-# Tạo venv thủ công
+# Create venv manually
 uv venv
 
 # Sync dependencies
@@ -246,19 +230,15 @@ uv sync
 ### Issue: Dependency conflict
 
 ```bash
-# Clear cache và sync lại
+# Clear cache and sync again
 rm -rf .venv uv.lock
 uv sync
 ```
 
----
-
-## 📚 Resources
+## Resources
 
 - [UV Documentation](https://docs.astral.sh/uv/)
 - [pyproject.toml Spec](https://packaging.python.org/en/latest/specifications/pyproject-toml/)
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 
----
-
-**Last Updated:** 2025-10-28
+**Last Updated:** 2025-01-28
